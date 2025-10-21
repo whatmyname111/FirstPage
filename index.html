@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Двойная reCAPTCHA</title>
+  <!-- Подключаем API для v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lf8PKUrAAAAAL5-XRnWj4GK-7x1aAQc-e-Hclpj" async defer></script>
+  <!-- Подключаем стандартный скрипт для v2 -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Пожалуйста, подтвердите, что вы не робот</h2>
+
+    <form id="myForm" action="/" method="POST">
+      <!-- v2 капча -->
+      <div class="g-recaptcha" data-sitekey="6Ldn040rAAAAAMG5MSb0IDvx0OW0Ij_Cj8jpYZas"></div>
+      <br/>
+
+      <!-- v3 капча (скрытая) -->
+      <input type="hidden" name="g-recaptcha-v3-response" id="g-recaptcha-v3-response">
+
+      <input type="submit" value="Подтвердить" class="btn" />
+    </form>
+
+  <script>
+    // v3 капча выполняется в фоне
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6Lf8PKUrAAAAAL5-XRnWj4GK-7x1aAQc-e-Hclpj', {action: 'submit'}).then(function(token) {
+        document.getElementById('g-recaptcha-v3-response').value = token;
+      });
+    });
+  </script>
+</body>
+</html>
