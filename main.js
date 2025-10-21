@@ -9,7 +9,7 @@ const app = express();
 // Конфигурация rate limiting
 const limiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, // 24 часа
-    max: 200, // максимум 200 запросов в день
+    max: 2000, // максимум 200 запросов в день
     message: '❌ Слишком много запросов. Попробуйте позже.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -17,13 +17,13 @@ const limiter = rateLimit({
 
 const hourlyLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 час
-    max: 50, // максимум 50 запросов в час
+    max: 90, // максимум 50 запросов в час
     message: '❌ Слишком много запросов. Попробуйте позже.',
 });
 
 // Секретные ключи
 const V2_SECRET = '6Ldn040rAAAAALJzqHbNh0stAUkTLxdXhzbsCzXg';
-const V3_SECRET = '6Lf8PKUrAAAAAC95IF40HiQ9nCdIAlP-KNRLD-7m';
+const V3_SECRET = '6LeTWvIrAAAAAC5DK1ZSlAOWK4G9NTGBEnr2pQwT';
 const REDIRECT_URL = 'https://apexhubvaultf.onrender.com/';
 
 // Middleware
