@@ -1,0 +1,75 @@
+body {
+margin: 0;
+background: linear-gradient(135deg, #1f4037, #99f2c8);
+font-family: 'Poppins', sans-serif;
+color: #fff;
+display: flex;
+height: 100vh;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+}
+
+.container {
+background: rgba(0, 0, 0, 0.5);
+padding: 50px 70px;
+border-radius: 25px;
+box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+text-align: center;
+width: 400px;
+animation: fadeIn 1.5s ease forwards;
+}
+
+h2 {
+font-weight: 700;
+font-size: 2em;
+margin-bottom: 25px;
+text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.btn {
+margin-top: 25px;
+background: linear-gradient(45deg, #27ae60, #2ecc71);
+border: none;
+color: white;
+padding: 15px 40px;
+font-size: 18px;
+border-radius: 25px;
+cursor: pointer;
+font-weight: 700;
+transition: background 0.3s ease;
+box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6);
+}
+
+.btn:hover {
+background: linear-gradient(45deg, #2ecc71, #27ae60);
+box-shadow: 0 8px 20px rgba(39, 174, 96, 0.8);
+}
+
+.error {
+background: #e74c3c;
+padding: 10px;
+border-radius: 15px;
+margin-bottom: 15px;
+font-weight: 700;
+color: #fff;
+text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Новый стиль для блока reCAPTCHA info /
+.recaptcha-info {
+font-size: 12px;
+color: #fff; / белый для контраста на тёмном фоне */
+margin-top: 15px;
+line-height: 1.4;
+}
+
+.recaptcha-info a {
+color: #1abc9c; /* яркий, заметный */
+text-decoration: underline;
+}
+
+@keyframes fadeIn {
+from {opacity: 0; transform: translateY(20px);}
+to {opacity: 1; transform: translateY(0);}
+}
