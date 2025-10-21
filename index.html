@@ -25,9 +25,9 @@
     </form>
 
   <script>
-    // v3 капча выполняется в фоне
+    // v3 капча выполняется фоне
     grecaptcha.ready(function() {
-      grecaptcha.execute('6Lf8PKUrAAAAAL5-XRnWj4GK-7x1aAQc-e-Hclpj', {action: 'submit'}).then(function(token) {
+      grecaptcha.execute('6LeTWvIrAAAAANTVEPKOfmUv00FuiBd3zr3Wb2W4', {action: 'submit'}).then(function(token) {
         document.getElementById('g-recaptcha-v3-response').value = token;
       });
     });
