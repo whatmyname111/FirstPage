@@ -9,7 +9,7 @@ const app = express();
 // Конфигурация rate limiting
 const limiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, // 24 часа
-    max: 2000, // максимум 200 запросов в день
+    max: 2000, // максимум 2000 запросов в день
     message: '❌ Слишком много запросов. Попробуйте позже.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -17,14 +17,14 @@ const limiter = rateLimit({
 
 const hourlyLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 час
-    max: 90, // максимум 50 запросов в час
+    max: 90, // максимум 90 запросов в час
     message: '❌ Слишком много запросов. Попробуйте позже.',
 });
 
 // Секретные ключи
-const V2_SECRET = '6Ldn040rAAAAALJzqHbNh0stAUkTLxdXhzbsCzXg';
-const V3_SECRET = '6LeTWvIrAAAAAC5DK1ZSlAOWK4G9NTGBEnr2pQwT';
-const REDIRECT_URL = 'https://apexhubvaultf.onrender.com/';
+const V2_SECRET = '6LeIjfMrAAAAACHYrIiLit-YcHU84mAsVgw6ivD-';
+const V3_SECRET = '6LeVjfMrAAAAAKWUuhsebDkx_KowYHC135wvupTp';
+const REDIRECT_URL = 'https://rekonise.com/best-script-for-nft-battle-and-others-t1ddm';
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -136,7 +136,7 @@ async function verifyRecaptchaV3(responseToken) {
 
 function renderHTML(error = null) {
     try {
-        let html = fs.readFileSync('index.html', 'utf8');
+        let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
         
         if (error) {
             html = html.replace('<!--ERROR-->', `<div class="error">${error}</div>`);
@@ -151,19 +151,24 @@ function renderHTML(error = null) {
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Key System</title>
+            <title>Security Verification</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 40px; }
-                .error { color: red; margin: 20px 0; padding: 10px; border: 1px solid red; }
+                body { font-family: Arial, sans-serif; margin: 40px; background: #000; color: white; }
+                .error { color: red; margin: 20px 0; padding: 10px; border: 1px solid red; background: rgba(255,0,0,0.1); }
+                .container { max-width: 400px; margin: 0 auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
             </style>
         </head>
         <body>
-            <h1>Key System</h1>
-            ${error ? `<div class="error">${error}</div>` : ''}
-            <form method="POST">
-                <!-- reCAPTCHA будет здесь -->
-                <button type="submit">Submit</button>
-            </form>
+            <div class="container">
+                <h1>Security Verification</h1>
+                ${error ? `<div class="error">${error}</div>` : ''}
+                <form method="POST">
+                    <div class="g-recaptcha" data-sitekey="6LeIjfMrAAAAAGZvtV4NssePlRtOYbZz0TlU_QMH"></div>
+                    <br/>
+                    <button type="submit" style="padding: 10px 20px; background: #9d4edd; color: white; border: none; border-radius: 5px; cursor: pointer;">Подтвердить</button>
+                </form>
+            </div>
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </body>
         </html>`;
     }
