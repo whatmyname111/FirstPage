@@ -1,40 +1,14 @@
 {
-  "name": "captcha-verification-system",
+  "name": "double-recaptcha-security",
   "version": "1.0.0",
-  "description": "Система проверки reCAPTCHA с верификацией браузера",
+  "description": "Double reCAPTCHA security system",
   "main": "server.js",
   "scripts": {
-    "start": "node main.js",
-    "dev": "nodemon main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [
-    "captcha",
-    "verification",
-    "express",
-    "security",
-    "recaptcha"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "express-rate-limit": "^6.8.1",
+    "express-rate-limit": "^6.7.0",
     "axios": "^1.4.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  },
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/your-username/captcha-verification-system.git"
-  },
-  "bugs": {
-    "url": "https://github.com/your-username/captcha-verification-system/issues"
-  },
-  "homepage": "https://github.com/your-username/captcha-verification-system#readme"
+  }
 }
