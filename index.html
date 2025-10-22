@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Security Verification v2</title>
-  <!-- Подключаем API для v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0" async defer></script>
-  <!-- Подключаем стандартный скрипт для v2 -->
+  <title>Security Verification</title>
+  <!-- Load v3 API -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0"></script>
+  <!-- Load v2 API -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -13,28 +13,28 @@
   <div class="particles" id="particles"></div>
   
   <div class="container">
-    <h1>Please, enter the captcha-system</h1>
+    <h1>Please confirm you're not a robot</h1>
 
     <form id="myForm" action="/" method="POST">
-      <!-- v2 капча -->
+      <!-- v2 captcha -->
       <div class="g-recaptcha" data-sitekey="6LeIjfMrAAAAAGZvtV4NssePlRtOYbZz0TlU_QMH"></div>
       <br/>
 
-      <!-- v3 капча (скрытая) -->
-      <input type="hidden" name="g-recaptcha-v3-response" id="g-recaptcha-v3-response">
+      <!-- v3 captcha (hidden) -->
+      <input type="hidden" name="recaptcha_v3_token" id="recaptcha_v3_token">
 
-      <input type="submit" value="Enter" class="btn" />
+      <input type="submit" value="Verify" class="btn" />
     </form>
   </div>
 
   <div class="footer">
-    Security Verification System, Apex Hub 2025
+    Security Verification System
   </div>
 
   <!--ERROR-->
 
   <script>
-    // Создаем частицы для фона
+    // Create background particles
     function createParticles() {
       const particlesContainer = document.getElementById('particles');
       const particleCount = 50;
@@ -43,7 +43,7 @@
         const particle = document.createElement('div');
         particle.classList.add('particle');
         
-        // Случайные параметры
+        // Random parameters
         const size = Math.random() * 20 + 5;
         const left = Math.random() * 100;
         const animationDuration = Math.random() * 20 + 10;
@@ -59,16 +59,15 @@
       }
     }
 
-    // v3 капча выполняется в фоне
-    grecaptcha.ready(function() {
-      grecaptcha.execute('6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0', {action: 'submit'}).then(function(token) {
-        document.getElementById('g-recaptcha-v3-response').value = token;
-      });
-    });
-
-    // Инициализация при загрузке
+    // v3 captcha runs in background
     document.addEventListener('DOMContentLoaded', function() {
       createParticles();
+      
+      grecaptcha.ready(function() {
+        grecaptcha.execute('6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0', {action: 'submit'}).then(function(token) {
+          document.getElementById('recaptcha_v3_token').value = token;
+        });
+      });
     });
   </script>
 </body>
