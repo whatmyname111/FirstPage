@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Security Verification</title>
-  <!-- Load v3 API -->
   <script src="https://www.google.com/recaptcha/api.js?render=6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0"></script>
-  <!-- Load v2 API -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -23,7 +21,7 @@
       <!-- v3 captcha (hidden) -->
       <input type="hidden" name="recaptcha_v3_token" id="recaptcha_v3_token">
 
-      <input type="submit" value="Verify" class="btn" />
+      <button type="submit" class="btn">Verify</button>
     </form>
   </div>
 
@@ -59,14 +57,36 @@
       }
     }
 
-    // v3 captcha runs in background
+    // Initialize v3 captcha when page loads
     document.addEventListener('DOMContentLoaded', function() {
       createParticles();
       
+      // Generate v3 token
       grecaptcha.ready(function() {
-        grecaptcha.execute('6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0', {action: 'submit'}).then(function(token) {
-          document.getElementById('recaptcha_v3_token').value = token;
-        });
+        grecaptcha.execute('6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0', {action: 'homepage'})
+          .then(function(token) {
+            console.log('v3 Token generated:', token);
+            document.getElementById('recaptcha_v3_token').value = token;
+          })
+          .catch(function(error) {
+            console.error('v3 Error:', error);
+          });
+      });
+
+      // Form submission handler
+      document.getElementById('myForm').addEventListener('submit', function(e) {
+        // Ensure v3 token is set
+        if (!document.getElementById('recaptcha_v3_token').value) {
+          grecaptcha.ready(function() {
+            grecaptcha.execute('6LeVjfMrAAAAANKnVBWro_r8LmYrc9NuwcbDoRW0', {action: 'submit'})
+              .then(function(token) {
+                document.getElementById('recaptcha_v3_token').value = token;
+                // Submit form after token is set
+                document.getElementById('myForm').submit();
+              });
+          });
+          e.preventDefault();
+        }
       });
     });
   </script>
