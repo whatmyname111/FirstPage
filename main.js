@@ -6,22 +6,22 @@ const fs = require('fs');
 
 const app = express();
 
-// Конфигурация rate limiting
+// Rate limiting configuration
 const limiter = rateLimit({
-    windowMs: 24 * 60 * 60 * 1000, // 24 часа
-    max: 2000, // максимум 2000 запросов в день
-    message: '❌ Слишком много запросов. Попробуйте позже.',
+    windowMs: 24 * 60 * 60 * 1000, // 24 hours
+    max: 2000, // maximum 2000 requests per day
+    message: '❌ Too many requests. Please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
 });
 
 const hourlyLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 час
-    max: 90, // максимум 90 запросов в час
-    message: '❌ Слишком много запросов. Попробуйте позже.',
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 90, // maximum 90 requests per hour
+    message: '❌ Too many requests. Please try again later.',
 });
 
-// Секретные ключи
+// Secret keys
 const V2_SECRET = '6LeIjfMrAAAAACHYrIiLit-YcHU84mAsVgw6ivD-';
 const V3_SECRET = '6LeVjfMrAAAAAKWUuhsebDkx_KowYHC135wvupTp';
 const REDIRECT_URL = 'https://rekonise.com/best-script-for-nft-battle-and-others-t1ddm';
@@ -32,18 +32,18 @@ app.use(express.json());
 app.use(express.static('.'));
 
 function verifyBrowserFingerprint(req) {
-    /** Упрощенная проверка браузера */
+    /** Simplified browser verification */
     const userAgent = req.headers['user-agent'] || '';
     const acceptLanguage = req.headers['accept-language'] || '';
     const referer = req.headers['referer'] || '';
     
-    // Проверка User-Agent
+    // User-Agent check
     if (!userAgent) {
-        console.log('❌ Отсутствует User-Agent');
+        console.log('❌ Missing User-Agent');
         return false;
     }
     
-    // Проверка на ботов
+    // Bot detection
     const botIndicators = [
         'bot', 'crawler', 'spider', 'scraper', 'monitor', 'checker',
         'python', 'requests', 'curl', 'wget', 'java', 'php', 'go-http'
@@ -51,28 +51,28 @@ function verifyBrowserFingerprint(req) {
     
     const userAgentLower = userAgent.toLowerCase();
     if (botIndicators.some(indicator => userAgentLower.includes(indicator))) {
-        console.log('❌ Обнаружен бот:', userAgent);
+        console.log('❌ Bot detected:', userAgent);
         return false;
     }
     
-    // Проверка языка (должен быть установлен)
+    // Language check
     if (!acceptLanguage) {
-        console.log('❌ Отсутствует Accept-Language');
+        console.log('❌ Missing Accept-Language');
         return false;
     }
     
-    // Проверка referrer (опционально, но желательно)
+    // Referer check (optional)
     if (!referer) {
-        console.log('⚠️ Отсутствует Referer');
-        // Не блокируем, но логируем
+        console.log('⚠️ Missing Referer');
+        // Don't block, just log
     }
     
-    console.log('✅ Проверка браузера пройдена');
+    console.log('✅ Browser verification passed');
     return true;
 }
 
 function validateRecaptchaResponse(responseToken) {
-    /** Валидация токена reCAPTCHA */
+    /** Validate reCAPTCHA token */
     if (!responseToken) {
         return false;
     }
@@ -81,7 +81,7 @@ function validateRecaptchaResponse(responseToken) {
         return false;
     }
     
-    // Проверка формата токена
+    // Token format validation
     const validTokenRegex = /^[a-zA-Z0-9_-]+$/;
     if (!validTokenRegex.test(responseToken)) {
         return false;
@@ -91,7 +91,7 @@ function validateRecaptchaResponse(responseToken) {
 }
 
 async function verifyRecaptchaV2(responseToken) {
-    /** Проверка reCAPTCHA v2 */
+    /** Verify reCAPTCHA v2 */
     const v2VerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
     const v2Payload = new URLSearchParams({
         secret: V2_SECRET,
@@ -107,13 +107,13 @@ async function verifyRecaptchaV2(responseToken) {
         });
         return response.data;
     } catch (error) {
-        console.error('Ошибка проверки reCAPTCHA v2:', error.message);
+        console.error('reCAPTCHA v2 verification error:', error.message);
         return { success: false };
     }
 }
 
 async function verifyRecaptchaV3(responseToken) {
-    /** Проверка reCAPTCHA v3 */
+    /** Verify reCAPTCHA v3 */
     const v3VerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
     const v3Payload = new URLSearchParams({
         secret: V3_SECRET,
@@ -129,7 +129,7 @@ async function verifyRecaptchaV3(responseToken) {
         });
         return response.data;
     } catch (error) {
-        console.error('Ошибка проверки reCAPTCHA v3:', error.message);
+        console.error('reCAPTCHA v3 verification error:', error.message);
         return { success: false, score: 0.0 };
     }
 }
@@ -146,7 +146,7 @@ function renderHTML(error = null) {
         
         return html;
     } catch (error) {
-        console.error('Ошибка чтения HTML файла:', error);
+        console.error('Error reading HTML file:', error);
         return `
         <!DOCTYPE html>
         <html>
@@ -165,7 +165,7 @@ function renderHTML(error = null) {
                 <form method="POST">
                     <div class="g-recaptcha" data-sitekey="6LeIjfMrAAAAAGZvtV4NssePlRtOYbZz0TlU_QMH"></div>
                     <br/>
-                    <button type="submit" style="padding: 10px 20px; background: #9d4edd; color: white; border: none; border-radius: 5px; cursor: pointer;">Подтвердить</button>
+                    <button type="submit" style="padding: 10px 20px; background: #9d4edd; color: white; border: none; border-radius: 5px; cursor: pointer;">Verify</button>
                 </form>
             </div>
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -174,7 +174,7 @@ function renderHTML(error = null) {
     }
 }
 
-// Маршруты
+// Routes
 app.get('/', limiter, (req, res) => {
     res.set('Content-Type', 'text/html; charset=utf-8');
     res.send(renderHTML());
@@ -182,32 +182,37 @@ app.get('/', limiter, (req, res) => {
 
 app.post('/', hourlyLimiter, async (req, res) => {
     try {
-        // Проверка браузера
+        // Browser verification
         if (!verifyBrowserFingerprint(req)) {
-            console.log('❌ Обнаружена подозрительная активность');
-            return res.status(403).send(renderHTML('❌ Обнаружена подозрительная активность.'));
+            console.log('❌ Suspicious activity detected');
+            return res.status(403).send(renderHTML('❌ Suspicious activity detected.'));
         }
 
-        // Получаем ответы с формы
-        const v2Response = req.body['g-recaptcha-response'];
-        const v3Response = req.body['g-recaptcha-v3-response'];
+        // Get form responses - FIXED FIELD NAMES
+        const v2Response = req.body['g-recaptcha-response']; // This is the main field from v2
+        const v3Response = req.body['recaptcha_v3_token'];   // This is our custom v3 field
 
-        // Валидация входных данных
+        console.log('Received data:', {
+            v2Response: v2Response ? 'present' : 'missing',
+            v3Response: v3Response ? 'present' : 'missing'
+        });
+
+        // Validate input data
         if (!v2Response || !validateRecaptchaResponse(v2Response)) {
-            console.log('❌ Неверный формат капчи');
-            return res.send(renderHTML('❌ Неверный формат капчи!'));
+            console.log('❌ Invalid captcha format');
+            return res.send(renderHTML('❌ Invalid captcha format!'));
         }
 
-        // Проверка v2 и v3 параллельно
+        // Verify v2 and v3 in parallel
         const [v2Result, v3Result] = await Promise.all([
             verifyRecaptchaV2(v2Response),
             verifyRecaptchaV3(v3Response)
         ]);
 
-        // Оценка v3 (score >= 0.5 считается человеком)
+        // v3 assessment (score >= 0.5 is considered human)
         const v3Pass = v3Result.success && v3Result.score >= 0.5;
 
-        console.log('Результаты проверки:', {
+        console.log('Verification results:', {
             v2Success: v2Result.success,
             v3Success: v3Result.success,
             v3Score: v3Result.score,
@@ -215,24 +220,24 @@ app.post('/', hourlyLimiter, async (req, res) => {
         });
 
         if (v2Result.success && v3Pass) {
-            // УСПЕШНО - редирект на внешний URL
-            console.log(`✅ Капча пройдена! Редирект на: ${REDIRECT_URL}`);
+            // SUCCESS - redirect to external URL
+            console.log(`✅ Captcha passed! Redirecting to: ${REDIRECT_URL}`);
             return res.redirect(302, REDIRECT_URL);
         } else {
-            let errorMsg = '❌ Капча не пройдена. ';
+            let errorMsg = '❌ Captcha verification failed. ';
             if (!v2Result.success) {
-                errorMsg += 'Ошибка проверки v2. ';
-                console.log('Ошибка reCAPTCHA v2:', v2Result['error-codes']);
+                errorMsg += 'v2 verification error. ';
+                console.log('reCAPTCHA v2 error:', v2Result['error-codes']);
             }
             if (!v3Pass) {
-                errorMsg += `Низкий рейтинг доверия: ${v3Result.score ? v3Result.score.toFixed(2) : '0.00'}.`;
-                console.log('Ошибка reCAPTCHA v3:', v3Result['error-codes']);
+                errorMsg += `Low trust score: ${v3Result.score ? v3Result.score.toFixed(2) : '0.00'}.`;
+                console.log('reCAPTCHA v3 error:', v3Result['error-codes']);
             }
             return res.send(renderHTML(errorMsg.trim()));
         }
     } catch (error) {
-        console.error('Ошибка обработки запроса:', error);
-        return res.status(500).send(renderHTML('❌ Внутренняя ошибка сервера.'));
+        console.error('Request processing error:', error);
+        return res.status(500).send(renderHTML('❌ Internal server error.'));
     }
 });
 
@@ -240,16 +245,16 @@ app.get('/style.css', (req, res) => {
     res.sendFile(path.join(__dirname, 'style.css'));
 });
 
-// Обработчик ошибки rate limit
+// Rate limit error handler
 app.use((err, req, res, next) => {
     if (err.status === 429) {
-        return res.status(429).send(renderHTML('❌ Слишком много запросов. Попробуйте позже.'));
+        return res.status(429).send(renderHTML('❌ Too many requests. Please try again later.'));
     }
     next(err);
 });
 
-// Запуск сервера
+// Server startup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Сервер запущен на порту ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
